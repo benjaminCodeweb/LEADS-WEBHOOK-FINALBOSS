@@ -1,6 +1,4 @@
-
-import google from 'googleapis'
-
+import { google } from 'googleapis';
 
 function authFromEnv() {
   const b64 = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON_BASE64;
@@ -12,14 +10,19 @@ function authFromEnv() {
   });
 }
 
-export async function guardarLeadEnSheets({ nombre,apellido, telefono }) {
+export async function guardarLeadEnSheets({ nombre, apellido, telefono }) {
   try {
     const auth = authFromEnv();
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
-    const range = process.env.GOOGLE_SHEETS_RANGE || 'Hoja 1!A:C';
+    const range = process.env.GOOGLE_SHEETS_RANGE || 'Hoja 1!A:D';
 
-    const values = [[nombre, apellido, telefono, new Date().toLocaleDateString('es-AR')]];
+    const values = [[
+      nombre || '',
+      apellido || '',
+      telefono || '',
+      new Date().toLocaleDateString('es-AR')
+    ]];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -29,10 +32,9 @@ export async function guardarLeadEnSheets({ nombre,apellido, telefono }) {
     });
 
     console.log('✅ Lead guardado en Google Sheets');
+    return { ok: true };
   } catch (err) {
     console.error('💥 Error guardando lead en Google Sheets:', err.message);
+    return { error: err.message };
   }
 }
-
-
-
