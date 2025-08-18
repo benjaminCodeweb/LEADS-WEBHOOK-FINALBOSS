@@ -156,7 +156,7 @@ Si dijo No:
         let result = null;
 
           if (name === 'insertarDatosGS') {
-              const datos  = guardarLeadEnSheets(args.fecha);
+              const datos  = await guardarLeadEnSheets(args);
            
               if (datos.error) {
               result = datos;

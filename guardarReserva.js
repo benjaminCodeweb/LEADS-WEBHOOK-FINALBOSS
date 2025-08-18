@@ -12,14 +12,14 @@ function authFromEnv() {
   });
 }
 
-export async function guardarLeadEnSheets({ nombre, telefono }) {
+export async function guardarLeadEnSheets({ nombre,apellido, telefono }) {
   try {
     const auth = authFromEnv();
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
     const range = process.env.GOOGLE_SHEETS_RANGE || 'Hoja 1!A:C';
 
-    const values = [[nombre, telefono, new Date().toLocaleDateString('es-AR')]];
+    const values = [[nombre, apellido, telefono, new Date().toLocaleDateString('es-AR')]];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
